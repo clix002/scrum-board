@@ -1,0 +1,4 @@
+#!/bin/sh
+# Format & lint staged files, stage the fixes
+bun run biome check --write --staged
+git update-index --again

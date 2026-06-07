@@ -1,0 +1,17 @@
+{
+	"name": "@repo/shared",
+	"version": "0.0.0",
+	"devDependencies": {},
+	"exports": {
+		"./*": "./src/*.ts"
+	},
+	"private": true,
+	"scripts": {
+		"build": "",
+		"check-types": "tsc --noEmit",
+		"lint": "biome check src/"
+	},
+	"dependencies": {
+		"zod": "^4.4.3"
+	}
+}
