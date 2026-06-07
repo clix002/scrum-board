@@ -1,0 +1,12 @@
+model Comment {
+  id      String @id @default(uuid())
+  content String
+
+  ownerId String
+  owner   User   @relation("UserComments", fields: [ownerId], references: [id], onDelete: Cascade)
+  taskId  String
+  task    Task   @relation("TaskComments", fields: [taskId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -1,0 +1,15 @@
+model User {
+  id        String  @id @default(uuid())
+  email     String  @unique
+  name      String
+  password  String
+  avatarUrl String?
+
+  // Relations
+  boards   Board[]   @relation("UserBoards")
+  tasks    Task[]    @relation("UserTasks")
+  comments Comment[] @relation("UserComments")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
