@@ -1,9 +1,9 @@
 {
-	"name": "@repo/shared",
+	"name": "@scrum-board/shared",
 	"version": "0.0.0",
 	"devDependencies": {},
 	"exports": {
-		"./*": "./src/*.ts"
+		"./schemas": "./src/schemas/index.ts"
 	},
 	"private": true,
 	"scripts": {
