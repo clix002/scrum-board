@@ -1,8 +1,22 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
+import { cors } from "hono/cors";
+import { authMiddleware } from "./middlewares/auth.middleware";
 import authRouter from "./modules/auth";
 
 const app = new OpenAPIHono();
+
+app.use("*", authMiddleware);
+
+app.use(
+	"/*",
+	cors({
+		origin: process.env.FRONTEND_URL || "http://localhost:5173",
+		allowHeaders: ["Content-Type", "Authorization"],
+		allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE"],
+		credentials: true,
+	}),
+);
 
 app.route("/auth", authRouter);
 
