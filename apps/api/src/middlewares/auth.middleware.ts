@@ -1,3 +1,4 @@
+import { isString } from "es-toolkit/predicate";
 import { createMiddleware } from "hono/factory";
 import { HTTPException } from "hono/http-exception";
 import { jwtVerify } from "jose";
@@ -8,7 +9,7 @@ type Env = {
 	};
 };
 
-export const authMiddleware = createMiddleware(async (c, next) => {
+export const authMiddleware = createMiddleware<Env>(async (c, next) => {
 	const authHeader = c.req.header("Authorization");
 
 	if (!authHeader) {
@@ -16,7 +17,6 @@ export const authMiddleware = createMiddleware(async (c, next) => {
 			message: "No Authorization header provided",
 		});
 	}
-
 	const token = authHeader.split(" ")[1];
 
 	if (!token) {
@@ -28,12 +28,18 @@ export const authMiddleware = createMiddleware(async (c, next) => {
 	try {
 		const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
-		const payload = await jwtVerify(token, secret);
+		const { payload } = await jwtVerify(token, secret);
 
-		c.set("jwtPayload", payload as unknown as { id: string });
+		if (!isString(payload.id) || payload.id.length === 0) {
+			throw new HTTPException(401, {
+				message: "Invalid token payload",
+			});
+		}
+
+		c.set("jwtPayload", { id: payload.id });
 
 		await next();
-	} catch (error) {
+	} catch (_error) {
 		throw new HTTPException(401, {
 			message: "Invalid token",
 		});

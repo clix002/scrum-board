@@ -12,6 +12,7 @@
 		"@prisma/client": "^7.8.0",
 		"@scalar/hono-api-reference": "^0.10.20",
 		"@scrum-board/shared": "workspace:*",
+		"es-toolkit": "^1.47.0",
 		"hono": "^4.12.23",
 		"jose": "^6.2.3",
 		"pg": "^8.21.0"
