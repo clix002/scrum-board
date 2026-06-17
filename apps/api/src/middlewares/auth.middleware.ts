@@ -2,14 +2,9 @@ import { isString } from "es-toolkit/predicate";
 import { createMiddleware } from "hono/factory";
 import { HTTPException } from "hono/http-exception";
 import { jwtVerify } from "jose";
+import type { AppEnv } from "@/types";
 
-type Env = {
-	Variables: {
-		jwtPayload: { id: string };
-	};
-};
-
-export const authMiddleware = createMiddleware<Env>(async (c, next) => {
+export const authMiddleware = createMiddleware<AppEnv>(async (c, next) => {
 	const authHeader = c.req.header("Authorization");
 
 	if (!authHeader) {

@@ -16,3 +16,17 @@ export const LoginSchema = z.object({
 	email: z.email(),
 	password: z.string().min(8).max(72),
 });
+
+export const UserResponseSchema = z.object({
+	id: z.string(),
+	email: z.string(),
+	name: z.string(),
+	avatarUrl: z.string().nullable(),
+});
+
+export const AuthResponseSchema = z.object({
+	message: z.string(),
+	accessToken: z.string(),
+	refreshToken: z.string(),
+	user: UserResponseSchema,
+});

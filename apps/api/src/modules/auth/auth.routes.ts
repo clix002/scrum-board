@@ -1,5 +1,9 @@
-import { createRoute, z } from "@hono/zod-openapi";
-import { LoginSchema, RegisterSchema } from "@scrum-board/shared/schemas";
+import { createRoute } from "@hono/zod-openapi";
+import {
+	AuthResponseSchema,
+	LoginSchema,
+	RegisterSchema,
+} from "@scrum-board/shared/schemas";
 
 export const registerRoute = createRoute({
 	method: "post",
@@ -18,10 +22,7 @@ export const registerRoute = createRoute({
 			description: "User registered successfully",
 			content: {
 				"application/json": {
-					schema: z.object({
-						message: z.string(),
-						token: z.string(),
-					}),
+					schema: AuthResponseSchema,
 				},
 			},
 		},
@@ -45,10 +46,7 @@ export const loginRoute = createRoute({
 			description: "User logged in successfully",
 			content: {
 				"application/json": {
-					schema: z.object({
-						message: z.string(),
-						token: z.string(),
-					}),
+					schema: AuthResponseSchema,
 				},
 			},
 		},
