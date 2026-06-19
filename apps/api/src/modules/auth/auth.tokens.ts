@@ -1,3 +1,4 @@
+import { randomUUIDv7 } from "bun";
 import { isString } from "es-toolkit/predicate";
 import { jwtVerify, SignJWT } from "jose";
 
@@ -17,7 +18,7 @@ export const signAccessToken = async (userId: string) => {
 };
 
 export const signRefreshToken = async (userId: string) => {
-	return await new SignJWT({ id: userId })
+	return await new SignJWT({ id: userId, jti: randomUUIDv7() })
 		.setProtectedHeader({ alg: "HS256" })
 		.setIssuedAt()
 		.setExpirationTime(REFRESH_DURATION)

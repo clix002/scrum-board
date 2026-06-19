@@ -2,7 +2,11 @@ import type { z } from "@hono/zod-openapi";
 import type { LoginSchema, RegisterSchema } from "@scrum-board/shared/schemas";
 import { HTTPException } from "hono/http-exception";
 import { authRepository } from "./auth.repository";
-import { signAccessToken, signRefreshToken } from "./auth.tokens";
+import {
+	signAccessToken,
+	signRefreshToken,
+	verifyRefreshToken,
+} from "./auth.tokens";
 
 export const registerUser = async (data: z.infer<typeof RegisterSchema>) => {
 	const { email, password, name } = data;
@@ -53,5 +57,17 @@ export const loginUser = async (data: z.infer<typeof LoginSchema>) => {
 		user,
 		accessToken,
 		refreshToken,
+	};
+};
+
+export const refreshSession = async (refreshToken: string) => {
+	const userId = await verifyRefreshToken(refreshToken);
+
+	const accessToken = await signAccessToken(userId);
+	const refreshTokenNew = await signRefreshToken(userId);
+
+	return {
+		accessToken,
+		refreshToken: refreshTokenNew,
 	};
 };
