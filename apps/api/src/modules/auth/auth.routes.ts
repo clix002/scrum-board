@@ -1,8 +1,9 @@
-import { createRoute } from "@hono/zod-openapi";
+import { createRoute, z } from "@hono/zod-openapi";
 import {
 	AuthResponseSchema,
 	LoginSchema,
 	RegisterSchema,
+	UserResponseSchema,
 } from "@scrum-board/shared/schemas";
 
 export const registerRoute = createRoute({
@@ -49,6 +50,46 @@ export const loginRoute = createRoute({
 					schema: AuthResponseSchema,
 				},
 			},
+		},
+	},
+});
+
+export const refreshRoute = createRoute({
+	method: "post",
+	path: "/refresh",
+	responses: {
+		204: {
+			description: "Session refreshed, new tokens set in cookies",
+		},
+	},
+});
+
+export const logoutRoute = createRoute({
+	method: "post",
+	path: "/logout",
+	responses: {
+		204: {
+			description: "Cookies cleared",
+		},
+	},
+});
+
+export const meRoute = createRoute({
+	method: "get",
+	path: "/me",
+	responses: {
+		200: {
+			description: "Current authenticated user",
+			content: {
+				"application/json": {
+					schema: z.object({
+						user: UserResponseSchema,
+					}),
+				},
+			},
+		},
+		401: {
+			description: "No active session",
 		},
 	},
 });
