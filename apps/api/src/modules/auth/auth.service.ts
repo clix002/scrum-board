@@ -10,7 +10,7 @@ export const registerUser = async (data: z.infer<typeof RegisterSchema>) => {
 	const existingUser = await authRepository.findByEmail(email);
 
 	if (existingUser) {
-		throw new HTTPException(400, { message: "User already exists" });
+		throw new HTTPException(409, { message: "User already exists" });
 	}
 
 	const hashedPassword = await Bun.password.hash(password);
@@ -37,7 +37,7 @@ export const loginUser = async (data: z.infer<typeof LoginSchema>) => {
 	const user = await authRepository.findByEmailForAuth(email);
 
 	if (!user) {
-		throw new HTTPException(400, { message: "Invalid credentials" });
+		throw new HTTPException(401, { message: "Invalid credentials" });
 	}
 
 	const isPasswordValid = await Bun.password.verify(password, user.password);
