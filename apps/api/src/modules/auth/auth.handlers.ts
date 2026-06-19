@@ -7,12 +7,14 @@ export const registerHandler: RouteHandler<typeof registerRoute> = async (
 ) => {
 	const body = c.req.valid("json");
 
-	const { token } = await registerUser(body);
+	const { accessToken, refreshToken, user } = await registerUser(body);
 
 	return c.json(
 		{
 			message: "User registered successfully",
-			token,
+			accessToken,
+			refreshToken,
+			user,
 		},
 		201,
 	);
@@ -20,12 +22,14 @@ export const registerHandler: RouteHandler<typeof registerRoute> = async (
 
 export const loginHandler: RouteHandler<typeof loginRoute> = async (c) => {
 	const body = c.req.valid("json");
-	const { token } = await loginUser(body);
+	const { accessToken, refreshToken, user } = await loginUser(body);
 
 	return c.json(
 		{
 			message: "User logged in successfully",
-			token,
+			accessToken,
+			refreshToken,
+			user,
 		},
 		200,
 	);

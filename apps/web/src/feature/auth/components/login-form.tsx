@@ -47,7 +47,7 @@ export function LoginForm({
 					token: result.token,
 					user: result.user,
 				});
-				navigate("/board");
+				navigate("/");
 			},
 			onError: (error) => {
 				toast.error(error.message || "An error occurred while logging in");

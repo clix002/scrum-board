@@ -49,7 +49,7 @@ export function RegisterForm({
 					token: result.token,
 					user: result.user,
 				});
-				navigate("/board");
+				navigate("/");
 			},
 			onError: (error) => {
 				toast.error(error.message || "An error occurred while registering");
