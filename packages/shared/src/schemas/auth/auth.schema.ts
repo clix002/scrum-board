@@ -26,7 +26,5 @@ export const UserResponseSchema = z.object({
 
 export const AuthResponseSchema = z.object({
 	message: z.string(),
-	accessToken: z.string(),
-	refreshToken: z.string(),
 	user: UserResponseSchema,
 });
