@@ -7,13 +7,16 @@ type LoginData = z.infer<typeof LoginSchema>;
 export const useLoginMutation = () => {
 	return useMutation({
 		mutationFn: async (data: LoginData) => {
-			const response = await fetch("http://localhost:3000/auth/login", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
+			const response = await fetch(
+				`${import.meta.env.BACKEND_URL}/auth/login`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(data),
 				},
-				body: JSON.stringify(data),
-			});
+			);
 
 			if (!response.ok) {
 				const errorData = await response.json();
