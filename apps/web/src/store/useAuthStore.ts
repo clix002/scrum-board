@@ -1,44 +1,25 @@
+import type { UserResponseSchema } from "@scrum-board/shared/schemas";
+import type { z } from "zod";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import type { Maybe } from "@/lib/utils";
 
-type User = {
-	id: string;
-	email: string;
-	name: string;
-};
-
-type Auth = {
-	token: string;
-	user: User;
-};
+type User = z.infer<typeof UserResponseSchema>;
 
 type AuthState = {
-	token: Maybe<string>;
 	user: Maybe<User>;
-	setAuth: (auth: Auth) => void;
-	logout: () => void;
+	setUser: (user: User) => void;
+	clearUser: () => void;
 };
 
-export const useAuthStore = create<AuthState>()(
-	persist(
-		(set) => ({
-			token: null,
-			user: null,
+export const useAuthStore = create<AuthState>()((set) => ({
+	user: null,
 
-			setAuth: ({ token, user }) =>
-				set({
-					token,
-					user,
-				}),
-			logout: () =>
-				set({
-					token: null,
-					user: null,
-				}),
+	setUser: (user) =>
+		set({
+			user,
 		}),
-		{
-			name: "auth-storage",
-		},
-	),
-);
+	clearUser: () =>
+		set({
+			user: null,
+		}),
+}));

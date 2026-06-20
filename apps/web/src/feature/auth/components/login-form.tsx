@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "@scrum-board/shared/schemas";
+import { useQueryClient } from "@tanstack/react-query";
 import { GalleryVerticalEnd } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { ME_QUERY_KEY } from "@/feature/auth/api/use-me";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useLoginMutation } from "../api/use-login";
@@ -25,7 +27,8 @@ export function LoginForm({
 	...props
 }: React.ComponentProps<"div">) {
 	const navigate = useNavigate();
-	const { setAuth } = useAuthStore();
+	const { setUser } = useAuthStore();
+	const queryClient = useQueryClient();
 	const {
 		register,
 		handleSubmit,
@@ -43,10 +46,8 @@ export function LoginForm({
 	const onSubmit = (data: LoginFormValues) => {
 		loginMutation(data, {
 			onSuccess: (result) => {
-				setAuth({
-					token: result.token,
-					user: result.user,
-				});
+				setUser(result.user);
+				queryClient.invalidateQueries({ queryKey: ME_QUERY_KEY });
 				navigate("/");
 			},
 			onError: (error) => {
