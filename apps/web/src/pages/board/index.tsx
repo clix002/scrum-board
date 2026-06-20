@@ -1,4 +1,6 @@
 import { BadgeCheckIcon, CreditCardIcon } from "lucide-react";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 import { AppSidebar } from "@/components/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -15,8 +17,26 @@ import {
 	SidebarProvider,
 	SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { useLogoutMutation } from "@/feature/auth/api/use-logout";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export const BoardPage = () => {
+	const navigate = useNavigate();
+	const { clearUser } = useAuthStore();
+	const { mutate: logoutMutation } = useLogoutMutation();
+
+	const handleLogout = () => {
+		logoutMutation(undefined, {
+			onSuccess: () => {
+				clearUser();
+				navigate("/login");
+			},
+			onError: (error) => {
+				toast.error(error.message || "Error al cerrar sesión");
+			},
+		});
+	};
+
 	return (
 		<SidebarProvider>
 			<AppSidebar />
@@ -39,7 +59,7 @@ export const BoardPage = () => {
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align="end">
 								<DropdownMenuGroup>
-									<DropdownMenuItem>
+									<DropdownMenuItem onSelect={handleLogout}>
 										<BadgeCheckIcon />
 										Log out
 									</DropdownMenuItem>
