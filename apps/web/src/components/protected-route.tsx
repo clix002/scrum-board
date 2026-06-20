@@ -6,9 +6,11 @@ type ProtectedRouteProps = {
 };
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-	const { token } = useAuthStore();
+	const { user } = useAuthStore();
 
-	if (!token) {
+	console.log("ProtectedRoute: user =", user);
+
+	if (!user) {
 		return <Navigate to="/login" replace />;
 	}
 

@@ -3,10 +3,10 @@ import { RegisterForm } from "@/feature/auth/components/register-form";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export const RegisterPage = () => {
-	const { token } = useAuthStore();
+	const { user } = useAuthStore();
 
-	if (token) {
-		return <Navigate to="/board" replace />;
+	if (user) {
+		return <Navigate to="/" replace />;
 	}
 
 	return (

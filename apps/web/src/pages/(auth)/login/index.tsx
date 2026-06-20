@@ -3,10 +3,10 @@ import { LoginForm } from "@/feature/auth/components/login-form";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export const LoginPage = () => {
-	const { token } = useAuthStore();
+	const { user } = useAuthStore();
 
-	if (token) {
-		return <Navigate to="/board" replace />;
+	if (user) {
+		return <Navigate to="/" replace />;
 	}
 
 	return (
