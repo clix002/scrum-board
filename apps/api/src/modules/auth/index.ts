@@ -1,4 +1,5 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { rateLimit } from "@/middlewares/rate-limit";
 import {
 	loginHandler,
 	logoutHandler,
@@ -15,6 +16,9 @@ import {
 } from "./auth.routes";
 
 const authRouter = new OpenAPIHono();
+
+authRouter.use("/login", rateLimit);
+authRouter.use("/register", rateLimit);
 
 authRouter.openapi(registerRoute, registerHandler);
 authRouter.openapi(loginRoute, loginHandler);
