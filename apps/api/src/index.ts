@@ -2,7 +2,8 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 import { cors } from "hono/cors";
 import authRouter from "./modules/auth";
-import type { AppEnv } from "./types";
+import type { AppEnv } from "./modules/auth/types";
+import boardRouter from "./modules/board";
 
 const app = new OpenAPIHono<AppEnv>();
 
@@ -17,6 +18,7 @@ app.use(
 );
 
 app.route("/auth", authRouter);
+app.route("/boards", boardRouter);
 
 app.doc("/openapi.json", {
 	openapi: "3.0.0",
