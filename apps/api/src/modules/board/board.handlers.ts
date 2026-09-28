@@ -1,0 +1,65 @@
+import type { RouteHandler } from "@hono/zod-openapi";
+import type { AppEnv } from "@/modules/auth/types";
+import type {
+	createBoardRoute,
+	deleteBoardRoute,
+	getBoardByIdRoute,
+	listBoardsRoute,
+	updateBoardRoute,
+} from "./board.routes";
+import { boardService } from "./board.service";
+
+export const listHandler: RouteHandler<typeof listBoardsRoute, AppEnv> = async (
+	c,
+) => {
+	const userId = c.get("jwtPayload").id;
+	const page = Number(c.req.query("page")) || 1;
+	const limit = Number(c.req.query("limit")) || 10;
+	const { docs, info } = await boardService.listByUser(userId, { page, limit });
+	return c.json({ docs, info }, 200);
+};
+
+export const getByIdHandler: RouteHandler<
+	typeof getBoardByIdRoute,
+	AppEnv
+> = async (c) => {
+	const userId = c.get("jwtPayload").id;
+	const id = c.req.param("id");
+
+	const board = await boardService.getById(id, userId);
+	return c.json(board, 200);
+};
+
+export const createHandler: RouteHandler<
+	typeof createBoardRoute,
+	AppEnv
+> = async (c) => {
+	const userId = c.get("jwtPayload").id;
+	const data = c.req.valid("json");
+
+	const board = await boardService.create(userId, data);
+	return c.json(board, 201);
+};
+
+export const updateHandler: RouteHandler<
+	typeof updateBoardRoute,
+	AppEnv
+> = async (c) => {
+	const userId = c.get("jwtPayload").id;
+	const id = c.req.param("id");
+	const data = c.req.valid("json");
+
+	const board = await boardService.update(id, userId, data);
+	return c.json(board, 200);
+};
+
+export const removeHandler: RouteHandler<
+	typeof deleteBoardRoute,
+	AppEnv
+> = async (c) => {
+	const userId = c.get("jwtPayload").id;
+	const id = c.req.param("id");
+
+	await boardService.remove(id, userId);
+	return c.body(null, 204);
+};

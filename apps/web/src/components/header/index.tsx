@@ -31,7 +31,7 @@ export const Header = ({ handleLogout }: HeaderProps) => {
 	const { user } = useAuthStore();
 	const { setTheme } = useTheme();
 	return (
-		<header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+		<header className="flex h-16 shrink-0 items-center gap-2 border-b">
 			<SidebarTrigger className="-ml-1" />
 			<div className="flex justify-between items-center w-full">
 				<Input className="max-w-sm" placeholder="Search..." />

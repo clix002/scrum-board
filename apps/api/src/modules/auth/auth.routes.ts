@@ -8,6 +8,7 @@ import {
 
 export const registerRoute = createRoute({
 	method: "post",
+	tags: ["Auth"],
 	path: "/register",
 	request: {
 		body: {
@@ -32,6 +33,7 @@ export const registerRoute = createRoute({
 
 export const loginRoute = createRoute({
 	method: "post",
+	tags: ["Auth"],
 	path: "/login",
 	request: {
 		body: {
@@ -56,6 +58,7 @@ export const loginRoute = createRoute({
 
 export const refreshRoute = createRoute({
 	method: "post",
+	tags: ["Auth"],
 	path: "/refresh",
 	responses: {
 		204: {
@@ -66,6 +69,7 @@ export const refreshRoute = createRoute({
 
 export const logoutRoute = createRoute({
 	method: "post",
+	tags: ["Auth"],
 	path: "/logout",
 	responses: {
 		204: {
@@ -76,6 +80,7 @@ export const logoutRoute = createRoute({
 
 export const meRoute = createRoute({
 	method: "get",
+	tags: ["Auth"],
 	path: "/me",
 	responses: {
 		200: {
