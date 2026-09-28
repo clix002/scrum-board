@@ -17,6 +17,7 @@ const ParamsSchema = z.object({
 
 export const listBoardsRoute = createRoute({
 	method: "get",
+	tags: ["Board"],
 	path: "/",
 	responses: {
 		200: {
@@ -32,6 +33,7 @@ export const listBoardsRoute = createRoute({
 
 export const getBoardByIdRoute = createRoute({
 	method: "get",
+	tags: ["Board"],
 	path: "/{id}",
 	request: {
 		params: ParamsSchema,
@@ -50,6 +52,7 @@ export const getBoardByIdRoute = createRoute({
 
 export const createBoardRoute = createRoute({
 	method: "post",
+	tags: ["Board"],
 	path: "/",
 	request: {
 		body: {
@@ -66,6 +69,7 @@ export const createBoardRoute = createRoute({
 
 export const updateBoardRoute = createRoute({
 	method: "put",
+	tags: ["Board"],
 	path: "/{id}",
 	request: {
 		params: ParamsSchema,
@@ -83,6 +87,7 @@ export const updateBoardRoute = createRoute({
 
 export const deleteBoardRoute = createRoute({
 	method: "delete",
+	tags: ["Board"],
 	path: "/{id}",
 	request: { params: ParamsSchema },
 	responses: {

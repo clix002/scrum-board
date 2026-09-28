@@ -1,10 +1,16 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: paginación genérica sobre modelos Prisma */
-
 import { PrismaPg } from "@prisma/adapter-pg";
+import type { PaginateOptions } from "@scrum-board/shared/schemas";
 import { Pool } from "pg";
-import { paginate } from "@/lib/pagination/paginate";
-import type { PaginateInfo, PaginateOptions } from "@/lib/pagination/types";
-import { PrismaClient } from "../prisma/generated/client";
+import {
+	type PaginatedResult,
+	type PaginateQuery,
+	paginate,
+} from "@/lib/pagination/paginate";
+import {
+	type Board,
+	type Prisma,
+	PrismaClient,
+} from "../prisma/generated/client";
 import { MODELS } from "./paginations";
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL! });
@@ -13,27 +19,36 @@ const basePrisma = new PrismaClient({ adapter });
 
 type ModelNames = (typeof MODELS)[number];
 
-type Paginator = {
-	paginate(args?: { where?: any; orderBy?: any }): {
-		withPages(
-			opts?: PaginateOptions,
-		): Promise<{ docs: any[]; info: PaginateInfo }>;
+type BoardWhere = Prisma.BoardWhereInput;
+type BoardOrderBy =
+	| Prisma.BoardOrderByWithRelationInput
+	| Prisma.BoardOrderByWithRelationInput[];
+
+type BoardPaginator = {
+	paginate(args?: PaginateQuery<BoardWhere, BoardOrderBy>): {
+		withPages(opts?: PaginateOptions): Promise<PaginatedResult<Board>>;
 	};
 };
+
+type ModelPaginators = Record<ModelNames, BoardPaginator>;
 
 const paginationFeature = Object.fromEntries(
 	MODELS.map((name) => [
 		name,
 		{
-			paginate(args?: any) {
+			paginate(args?: PaginateQuery<BoardWhere, BoardOrderBy>) {
 				return {
 					withPages: (opts?: PaginateOptions) =>
-						paginate((basePrisma as any)[name], args, opts),
+						paginate<Board, BoardWhere, BoardOrderBy>(
+							basePrisma[name],
+							args,
+							opts,
+						),
 				};
 			},
-		} satisfies Paginator,
+		} satisfies BoardPaginator,
 	]),
-) as Record<ModelNames, Paginator>;
+) as ModelPaginators;
 
 export const prisma = basePrisma.$extends({
 	model: paginationFeature,

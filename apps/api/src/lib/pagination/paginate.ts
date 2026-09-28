@@ -1,13 +1,30 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: extensión dinámica de $extends desde array */
-import type { PaginateInfo, PaginateOptions } from "./types";
+import type {
+	PaginateInfo,
+	PaginateOptions,
+} from "@scrum-board/shared/schemas";
 
-type AnyModel = Record<"findMany" | "count", (...args: any[]) => any>;
+export type PaginateQuery<TWhere, TOrderBy> = {
+	where?: TWhere;
+	orderBy?: TOrderBy;
+};
 
-export async function paginate(
-	model: AnyModel,
-	query?: { where?: any; orderBy?: any },
+export type PaginatableModel<TDoc, TWhere, TOrderBy> = {
+	findMany(
+		args: PaginateQuery<TWhere, TOrderBy> & { skip?: number; take?: number },
+	): Promise<TDoc[]>;
+	count(args: { where?: TWhere }): Promise<number>;
+};
+
+export type PaginatedResult<TDoc> = {
+	docs: TDoc[];
+	info: PaginateInfo;
+};
+
+export async function paginate<TDoc, TWhere, TOrderBy>(
+	model: PaginatableModel<TDoc, TWhere, TOrderBy>,
+	query?: PaginateQuery<TWhere, TOrderBy>,
 	opts?: PaginateOptions,
-) {
+): Promise<PaginatedResult<TDoc>> {
 	const { page = 1, limit = 10 } = opts ?? {};
 	const skip = (page - 1) * limit;
 
@@ -29,6 +46,6 @@ export async function paginate(
 			prevPage: page > 1 ? page - 1 : undefined,
 			totalDocs: Number(totalDocs),
 			totalPages,
-		} satisfies PaginateInfo,
+		},
 	};
 }

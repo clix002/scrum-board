@@ -1,6 +1,6 @@
+import type { PaginateOptions } from "@scrum-board/shared/schemas";
 import { prisma } from "@/db/connections";
 import type { Prisma } from "@/db/prisma/generated/client";
-import type { PaginateOptions } from "@/lib/pagination/types";
 export const boardRepository = {
 	findPaginatedByUserId(userId: string, opts: PaginateOptions) {
 		return prisma.board

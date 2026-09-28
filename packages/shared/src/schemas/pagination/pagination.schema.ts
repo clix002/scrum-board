@@ -16,3 +16,11 @@ export function paginatedResponseOf<T extends z.ZodTypeAny>(itemSchema: T) {
 		info: PaginateInfoSchema,
 	});
 }
+
+export const PaginateOptionsSchema = z.object({
+	page: z.number().optional(),
+	limit: z.number().optional(),
+});
+
+export type PaginateInfo = z.infer<typeof PaginateInfoSchema>;
+export type PaginateOptions = z.infer<typeof PaginateOptionsSchema>;

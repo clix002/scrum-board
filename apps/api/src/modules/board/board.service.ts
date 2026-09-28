@@ -1,7 +1,9 @@
 import type { z } from "@hono/zod-openapi";
-import type { CreateBoardSchema } from "@scrum-board/shared/schemas";
+import type {
+	CreateBoardSchema,
+	PaginateOptions,
+} from "@scrum-board/shared/schemas";
 import { HTTPException } from "hono/http-exception";
-import type { PaginateOptions } from "@/lib/pagination/types";
 import { boardRepository } from "./board.repository";
 
 export const boardService = {
