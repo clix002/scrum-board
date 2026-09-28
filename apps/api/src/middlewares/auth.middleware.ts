@@ -1,18 +1,13 @@
 import { isString } from "es-toolkit/predicate";
+import { getCookie } from "hono/cookie";
 import { createMiddleware } from "hono/factory";
 import { HTTPException } from "hono/http-exception";
 import { jwtVerify } from "jose";
-import type { AppEnv } from "@/types";
+import { ACCESS_COOKIE } from "@/modules/auth/auth.cookies";
+import type { AppEnv } from "@/modules/auth/types";
 
 export const authMiddleware = createMiddleware<AppEnv>(async (c, next) => {
-	const authHeader = c.req.header("Authorization");
-
-	if (!authHeader) {
-		throw new HTTPException(401, {
-			message: "No Authorization header provided",
-		});
-	}
-	const token = authHeader.split(" ")[1];
+	const token = getCookie(c, ACCESS_COOKIE);
 
 	if (!token) {
 		throw new HTTPException(401, {

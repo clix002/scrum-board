@@ -1,6 +1,10 @@
 {
 	"compilerOptions": {
+		"target": "ESNext",
+		"noEmit": true,
+		"skipLibCheck": true,
 		"strict": true,
+		"moduleResolution": "bundler",
 		"jsx": "react-jsx",
 		"jsxImportSource": "hono/jsx",
 		"paths": {
